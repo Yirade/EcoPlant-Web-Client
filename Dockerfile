@@ -30,3 +30,6 @@ RUN apt-get update \
     && useradd -s /bin/bash -m vscode \
     && groupadd docker \
     && usermod -aG docker vscode
+
+# Command to keep the container running
+CMD tail -f /dev/null
