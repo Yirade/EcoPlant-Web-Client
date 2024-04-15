@@ -32,4 +32,4 @@ RUN apt-get update \
     && usermod -aG docker vscode
 
 # Command to keep the container running
-CMD tail -f /dev/null
+CMD npm install && npm start
