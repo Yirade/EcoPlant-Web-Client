@@ -6,39 +6,34 @@ FROM node:lts AS development
 # Set working directory
 WORKDIR /app
 
-# 
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
+# Copy package.json and package-lock.json to install dependencies
+COPY package.json package-lock.json ./
 
-# Same as npm install
-# RUN npm ci
-
+# Install dependencies
 RUN npm install
 
-COPY . /app
+# Copy the rest of the application code
+COPY . .
 
+# Set environment variables
 ENV CI=true
 ENV PORT=3000
 
+# Command to start the application
 CMD [ "npm", "start" ]
 
+# Additional stage for development environment setup
+FROM development AS dev-envs
+
+# Install necessary tools
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git \
+    && useradd -s /bin/bash -m vscode \
+    && groupadd docker \
+    && usermod -aG docker vscode
+
+# Additional stage for building the application
 FROM development AS build
 
+# Run additional build steps if necessary
 # RUN npm run build
-
-
-FROM development as dev-envs
-RUN <<EOF
-apt-get update
-apt-get install -y --no-install-recommends git
-EOF
-
-RUN <<EOF
-useradd -s /bin/bash -m vscode
-groupadd docker
-usermod -aG docker vscode
-EOF
-# install Docker tools (cli, buildx, compose)
-COPY --from=gloursdocker/docker / /
-CMD [ "npm", "start" ]
-
