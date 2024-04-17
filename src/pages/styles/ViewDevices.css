@@ -1,0 +1,61 @@
+/* ViewDevices.css */
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0; /* Light gray background color */
+    min-height: 100vh; /* Ensure the container takes up the full viewport height */
+  }
+  
+  .card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive grid layout */
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .card {
+    background-color: #4CAF50; /* Green background color */
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+    transition: transform 0.3s ease-in-out; /* Add transition for smoother hover effect */
+  }
+  
+  .card:hover {
+    transform: translateY(-5px); /* Move up slightly on hover */
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  .card-content {
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  .card-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .button {
+    background-color: #ffffff; /* White background color for buttons */
+    color: #4CAF50; /* Green text color for buttons */
+    padding: 10px 20px;
+    border: 2px solid #4CAF50; /* Green border */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, border-color 0.3s; /* Add transition for smoother hover effect */
+  }
+  
+  .button:hover {
+    background-color: #4CAF50; /* Green background color on hover */
+    color: white; /* White text color on hover */
+  }
+  

@@ -7,7 +7,7 @@ import { AppBar, Toolbar, IconButton, Typography, Container, Box, Button, Menu, 
 import MenuIcon from '@mui/icons-material/Menu';
 import { green, grey } from '@mui/material/colors';
 import { CircularProgress } from '@mui/material';
-
+import './styles/ViewDevices.css';
 const ViewDevices = () => {
     const { authTokens, logoutUser } = useContext(AuthContext);
     const [devices, setDevices] = useState([]);

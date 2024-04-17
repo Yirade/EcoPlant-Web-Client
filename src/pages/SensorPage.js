@@ -5,10 +5,7 @@ import AuthContext from '../context/AuthContext';
 
 const SensorDashboard = ({ deviceId }) => {
   const [logs, setLogs] = useState([]);
-  const [temperatureData, setTemperatureData] = useState([]);
-  const [humidityData, setHumidityData] = useState([]);
-  const [soilMoistureData, setSoilMoistureData] = useState([]);
-  const [lightData, setLightData] = useState([]);
+  const [sensorData, setSensorData] = useState({});
   const { authTokens } = useContext(AuthContext);
 
   useEffect(() => {
@@ -17,10 +14,16 @@ const SensorDashboard = ({ deviceId }) => {
 
   useEffect(() => {
     if (logs.length > 0) {
-      setTemperatureData(logs.map(log => ({ x: new Date(log.timestamp), y: log.temperature })));
-      setHumidityData(logs.map(log => ({ x: new Date(log.timestamp), y: log.humidity })));
-      setSoilMoistureData(logs.map(log => ({ x: new Date(log.timestamp), y: log.soil_moisture })));
-      setLightData(logs.map(log => ({ x: new Date(log.timestamp), y: log.light })));
+      const data = {};
+      logs.forEach(log => {
+        Object.keys(log).forEach(key => {
+          if (key !== 'timestamp' && log[key] !== null && typeof log[key] !== 'undefined') {
+            if (!data[key]) data[key] = [];
+            data[key].push({ x: new Date(), y: log[key] });
+          }
+        });
+      });
+      setSensorData(data);
     }
   }, [logs]);
 
@@ -32,7 +35,7 @@ const SensorDashboard = ({ deviceId }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authTokens.access}`
         },
-        body: JSON.stringify({ device_id: deviceId })
+        body: JSON.stringify({ device_id: "05e4bc86-a09b-4b1d-813f-318dc94cb484" })
       });
 
       if (response.ok) {
@@ -46,49 +49,20 @@ const SensorDashboard = ({ deviceId }) => {
     }
   };
 
-  const clearLogs = () => {
-    setLogs([]);
-  };
-
   return (
     <div className="sensor-dashboard">
       <div className="charts">
-        <div className="chart">
-          <h3><i className="fas fa-thermometer-half chart-icon"></i>Temperature</h3>
-          <Chart
-            options={{ xaxis: { type: 'datetime' }, yaxis: { title: { text: 'Temperature (°C)' } } }}
-            series={[{ name: 'Temperature', data: temperatureData }]}
-            type="line"
-            width="100%"
-          />
-        </div>
-        <div className="chart">
-          <h3><i className="fas fa-tint chart-icon"></i>Humidity</h3>
-          <Chart
-            options={{ xaxis: { type: 'datetime' }, yaxis: { title: { text: 'Humidity (%)' } } }}
-            series={[{ name: 'Humidity', data: humidityData }]}
-            type="line"
-            width="100%"
-          />
-        </div>
-        <div className="chart">
-          <h3><i className="fas fa-water chart-icon"></i>Soil Moisture</h3>
-          <Chart
-            options={{ xaxis: { type: 'datetime' }, yaxis: { title: { text: 'Soil Moisture (%)' } } }}
-            series={[{ name: 'Soil Moisture', data: soilMoistureData }]}
-            type="line"
-            width="100%"
-          />
-        </div>
-        <div className="chart">
-          <h3><i className="far fa-sun chart-icon"></i>Light</h3>
-          <Chart
-            options={{ xaxis: { type: 'datetime' }, yaxis: { title: { text: 'Light Intensity (lux)' } } }}
-            series={[{ name: 'Light', data: lightData }]}
-            type="line"
-            width="100%"
-          />
-        </div>
+        {Object.keys(sensorData).map((sensor, index) => (
+          <div key={index} className="chart">
+            <h3>{sensor.toUpperCase()}</h3>
+            <Chart
+              options={{ xaxis: { type: 'datetime' }, yaxis: { title: { text: `${sensor.toUpperCase()} Value` } } }}
+              series={[{ name: sensor.toUpperCase(), data: sensorData[sensor] }]}
+              type="line"
+              width="100%"
+            />
+          </div>
+        ))}
       </div>
       <div className="logs-container">
         <div className="logs">
@@ -97,13 +71,16 @@ const SensorDashboard = ({ deviceId }) => {
             <ul>
               {logs.map((log, index) => (
                 <li key={index}>
-                  Temp: {log.temperature}, Hum: {log.humidity}, Soil: {log.soil_moisture}, Light: {log.light}, Timestamp: {log.timestamp}
+                  {Object.keys(log)
+                    .filter(key => key !== 'timestamp' && log[key] !== null && typeof log[key] !== 'undefined')
+                    .map((key, index) => (
+                      <span key={index}>{`${key.toUpperCase()}: ${log[key]}, `}</span>
+                    ))}
                 </li>
               ))}
             </ul>
             <div className="controls">
               <button className="add-log-btn" onClick={fetchLogs}>Refresh Logs</button>
-              <button className="clear-logs-btn" onClick={clearLogs}>Clear Logs</button>
             </div>
           </div>
         </div>
