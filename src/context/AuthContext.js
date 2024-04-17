@@ -8,7 +8,7 @@ const AuthContext = createContext();
 
 export default AuthContext;
 
-export const AuthProvider = ({children}) => {
+export const AuthProvider = ({ children }) => {
     const [authTokens, setAuthTokens] = useState(() => localStorage.getItem('authTokens') ? JSON.parse(localStorage.getItem('authTokens')) : null);
     const [user, setUser] = useState(() => localStorage.getItem('authTokens') ? jwt_decode(localStorage.getItem('authTokens')) : null);
     const [loading, setLoading] = useState(true);
@@ -22,16 +22,16 @@ export const AuthProvider = ({children}) => {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' 
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     'username': e.target.username.value,
                     'password': e.target.password.value
                 })
             });
-    
+
             if (response.status === 200) {
-                const data = await response.json(); 
+                const data = await response.json();
                 setAuthTokens(data);
                 setUser(jwt_decode(data.access));
                 localStorage.setItem('authTokens', JSON.stringify(data));
@@ -52,7 +52,7 @@ export const AuthProvider = ({children}) => {
                 mode: 'cors',
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json' 
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     'username': e.target.username.value,
@@ -60,9 +60,9 @@ export const AuthProvider = ({children}) => {
                     'password': e.target.password.value
                 })
             });
-    
+
             if (response.status === 200) {
-                const data = await response.json(); 
+                const data = await response.json();
                 setAuthTokens(data);
                 setUser(jwt_decode(data.access));
                 localStorage.setItem('authTokens', JSON.stringify(data));
@@ -92,13 +92,13 @@ export const AuthProvider = ({children}) => {
                 },
                 body: JSON.stringify({ 'refresh': authTokens?.refresh })
             });
-    
+
             if (response.status === 200) {
-               
+
             } else {
                 logoutUser();
             }
-    
+
             if (loading) {
                 setLoading(false);
             }
@@ -107,7 +107,7 @@ export const AuthProvider = ({children}) => {
             logoutUser();
         }
     };
-    
+
 
     const contextData = {
         user: user,
