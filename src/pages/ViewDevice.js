@@ -7,14 +7,15 @@ import { AppBar, Toolbar, IconButton, Typography, Container, Box, Button, Menu, 
 import MenuIcon from '@mui/icons-material/Menu';
 import { green, grey } from '@mui/material/colors';
 import { CircularProgress } from '@mui/material';
-import './styles/ViewDevices.css';
+import './styles/ViewDevices.css'; // Import CSS file
+
 const ViewDevices = () => {
     const { authTokens, logoutUser } = useContext(AuthContext);
     const [devices, setDevices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const [openProfileDialog, setOpenProfileDialog] = useState(false);
-    const [profileData, setProfileData] = useState({ username: '', email: '' }); // Initialize profile data with empty values
+    const [profileData, setProfileData] = useState({ username: '', email: '' });
     const isMobile = useMediaQuery('(max-width:600px)');
     const history = useHistory();
     
@@ -30,7 +31,6 @@ const ViewDevices = () => {
                 setProfileData(response.data);
             } catch (error) {
                 console.error('Error fetching user details:', error);
-                // Handle error fetching user details
             }
         };
         fetchUserData();
@@ -47,7 +47,6 @@ const ViewDevices = () => {
             } catch (error) {
                 console.error('Error fetching devices:', error);
                 setLoading(false);
-                // Handle error fetching devices
             }
         };
         fetchDevices();
@@ -78,7 +77,6 @@ const ViewDevices = () => {
         setOpenProfileDialog(false);
     };
 
-    
     const handleProfileSubmit = () => {
         console.log('Updating profile with:', profileData);
         handleCloseProfileDialog();
@@ -103,9 +101,11 @@ const ViewDevices = () => {
         history.push(`/sensor/${deviceId}`);
     };
 
+    
     return (
-        <div>
-            <AppBar position="static" sx={{ backgroundColor: green[500] }}>
+       
+        <div className="view-devices-container"  style={{ backgroundColor:  '#b4ecb4' , minHeight: '100vh', padding: '20px' }}>
+           <AppBar position="static" style={{ backgroundColor:  '#4caf50'  }}>
                 <Container maxWidth="xl">
                     <Toolbar disableGutters>
                         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -148,14 +148,14 @@ const ViewDevices = () => {
                 </Container>
             </AppBar>
             <Container maxWidth="xl">
-                <Box display="grid" gridTemplateColumns={isMobile ? "repeat(1, 1fr)" : "repeat(3, 1fr)"} mt={4} gap={2}>
+                <Box display="grid" gridTemplateColumns={isMobile ? "repeat(1, 1fr)" : "repeat(2, 1fr)"} mt={4} gap={2}>
                     {loading ? (
                         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                             <CircularProgress />
                         </Box>
                     ) : (
                         devices.map((device, index) => (
-                            <Card key={index} sx={{ backgroundColor: grey[200], boxShadow: 3 }}>
+                            <Card key={index} className={`device-card ${device.status === 'active' ? 'active' : ''}`} sx={{ backgroundColor: "#388e3c", boxShadow: 3, cursor: 'pointer' }}>
                                 <CardContent>
                                     <Typography variant="h5" component="div">
                                         Device Name: {device.name}
@@ -175,7 +175,6 @@ const ViewDevices = () => {
                     )}
                 </Box>
             </Container>
-            {/* Profile Dialog */}
             <Dialog open={openProfileDialog} onClose={handleCloseProfileDialog}>
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogContent>
@@ -198,7 +197,6 @@ const ViewDevices = () => {
                         value={profileData.email}
                         onChange={handleInputChange}
                     />
-                    {/* Add fields for changing profile picture and password if needed */}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCloseProfileDialog}>Cancel</Button>

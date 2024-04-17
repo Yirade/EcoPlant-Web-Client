@@ -18,7 +18,7 @@
 
 .chart {
   width: calc(33.33% - 20px); /* Set width for responsive layout */
-  border: 2px solid #64ffda; /* Turquoise border color */
+  border: 2px solid #12755e; /* Turquoise border color */
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -27,7 +27,7 @@
 
 .chart h3 {
   text-align: center;
-  color: #64ffda;
+  color: #12755e;
   margin-bottom: 15px;
   font-size: 24px;
 }
@@ -38,7 +38,7 @@
 
 .log-box {
   width: 100%;
-  border: 2px solid #64ffda;
+  border: 2px solid #12755e;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -60,7 +60,7 @@
   margin-right: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #64ffda;
+  background-color: #12755e;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
