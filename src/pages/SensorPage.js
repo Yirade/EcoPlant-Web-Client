@@ -15,14 +15,25 @@ const SensorDashboard = ({ deviceId }) => {
   useEffect(() => {
     if (logs.length > 0) {
       const data = {};
+
+      // Initialize data for each sensor
       logs.forEach(log => {
         Object.keys(log).forEach(key => {
-          if (key !== 'timestamp' && log[key] !== null && typeof log[key] !== 'undefined') {
+          if (key !== 'timestamp' && key !== 'light' && log[key] !== null && typeof log[key] !== 'undefined') {
             if (!data[key]) data[key] = [];
-            data[key].push({ x: new Date(), y: log[key] });
           }
         });
       });
+
+      // Concatenate values for each sensor
+      logs.forEach(log => {
+        Object.keys(log).forEach(key => {
+          if (key !== 'timestamp' && key !== 'light' && log[key] !== null && typeof log[key] !== 'undefined') {
+            data[key].push({ x: new Date(log.timestamp), y: log[key] });
+          }
+        });
+      });
+
       setSensorData(data);
     }
   }, [logs]);
@@ -35,12 +46,14 @@ const SensorDashboard = ({ deviceId }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authTokens.access}`
         },
-        body: JSON.stringify({ device_id: "05e4bc86-a09b-4b1d-813f-318dc94cb484" })
+        body: JSON.stringify({ device_id: "7c7dd97d-cd29-4d92-aed6-0449f60796b0" })
       });
 
       if (response.ok) {
         const data = await response.json();
-        setLogs(data);
+        // Sort logs based on timestamps
+        const sortedLogs = data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+        setLogs(sortedLogs);
       } else {
         console.error('Failed to fetch logs');
       }
@@ -71,8 +84,9 @@ const SensorDashboard = ({ deviceId }) => {
             <ul>
               {logs.map((log, index) => (
                 <li key={index}>
+                  <span>Timestamp: {new Date(log.timestamp).toLocaleString()}</span>
                   {Object.keys(log)
-                    .filter(key => key !== 'timestamp' && log[key] !== null && typeof log[key] !== 'undefined')
+                    .filter(key => key !== 'timestamp' && key !== 'light' && log[key] !== null && typeof log[key] !== 'undefined')
                     .map((key, index) => (
                       <span key={index}>{`${key.toUpperCase()}: ${log[key]}, `}</span>
                     ))}

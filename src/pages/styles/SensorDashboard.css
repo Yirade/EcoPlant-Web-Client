@@ -3,7 +3,7 @@
 .sensor-dashboard {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: center; /* Center elements horizontally */
   padding: 20px;
   width: 100%;
 }
@@ -11,50 +11,46 @@
 .charts {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center; /* Center charts horizontally */
   width: 100%;
-  margin-bottom: 20px;
+  gap: 20px; /* Add gap between charts */
 }
 
 .chart {
-  width: 48%;
-  border: 2px solid #388E3C; /* Updated green color */
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.08);
-  transition: transform 0.3s ease-in-out; /* Smooth scaling transition */
+  width: calc(33.33% - 20px); /* Set width for responsive layout */
+  border: 2px solid #64ffda; /* Turquoise border color */
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
-.chart:hover {
-  transform: scale(1.05); /* Slight scale on hover for 3D effect */
-}
-
 .chart h3 {
-  text-align: center; /* Center-align the title */
-  color: #1b5e20; /* Darker green for contrast */
-  margin-bottom: 10px;
-  font-size: 20px; /* Make the title larger */
+  text-align: center;
+  color: #64ffda;
+  margin-bottom: 15px;
+  font-size: 24px;
 }
 
-.logs {
+.logs-container {
   width: 100%;
 }
 
 .log-box {
   width: 100%;
-  border: 2px solid #388E3C; /* Updated green color */
-  border-radius: 8px;
+  border: 2px solid #64ffda;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  overflow-y: auto; /* Adds scrolling to logs if needed */
+  overflow-y: auto;
 }
 
 .controls {
   width: 100%;
   display: flex;
   justify-content: center;
+  margin-top: 20px;
 }
 
 .add-log-btn,
@@ -64,20 +60,19 @@
   margin-right: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #4CAF50; /* Standard green */
+  background-color: #64ffda;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: background-color 0.3s;
 }
 
 .add-log-btn:hover,
 .clear-logs-btn:hover {
-  background-color: #388E3C; /* Darker green */
-  transform: translateY(-2px); /* Small lift effect */
+  background-color: #4ecdc4;
 }
 
 .logs h3 {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .logs ul {
@@ -86,11 +81,17 @@
 }
 
 .logs ul li {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 1024px) {
+  .chart {
+    width: calc(50% - 20px); /* Set width for responsive layout */
+  }
 }
 
 @media (max-width: 600px) {
   .chart {
-      width: 100%; /* Set charts to take full width on smaller screens */
+    width: calc(100% - 20px); /* Set width for responsive layout */
   }
 }
