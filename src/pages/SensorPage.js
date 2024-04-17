@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams hook
 import Chart from 'react-apexcharts';
 import './styles/SensorDashboard.css'; // Import CSS file for styling
 import AuthContext from '../context/AuthContext';
 
-const SensorDashboard = ({ deviceId }) => {
+const SensorDashboard = () => { // No need to pass deviceId as prop
   const [logs, setLogs] = useState([]);
   const [sensorData, setSensorData] = useState({});
   const { authTokens } = useContext(AuthContext);
+  const { deviceId } = useParams(); // Access deviceId from route params
 
   useEffect(() => {
     fetchLogs();
-  }, [deviceId]);
+  }, [deviceId]); // Re-fetch logs when deviceId changes
 
   useEffect(() => {
     if (logs.length > 0) {
@@ -46,7 +48,7 @@ const SensorDashboard = ({ deviceId }) => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${authTokens.access}`
         },
-        body: JSON.stringify({ device_id: "7c7dd97d-cd29-4d92-aed6-0449f60796b0" })
+        body: JSON.stringify({ device_id: deviceId }) // Use deviceId from route params
       });
 
       if (response.ok) {
